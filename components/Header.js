@@ -10,15 +10,21 @@ import {
 
 import { HomeIcon } from '@heroicons/react/solid';
 import { signIn, signOut, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import { useRecoilState } from 'recoil';
+import { modalState } from '../atoms/modelAtom';
 
 function Header() {
   const { data: session } = useSession();
-  console.log(session);
+  const router = useRouter();
+  const [open, setOpen] = useRecoilState(modalState);
+
   return (
     <div className='shadow-sm border-b bg-white sticky top-0 z-50'>
       <div className='flex justify-between max-w-6xl mx-5 lg:mx-auto'>
         {/* Left */}
         <div
+          onClick={() => router.push('/')}
           className='relative hidden lg:inline-grid h-24 w-24
         cursor-pointer'
         >
@@ -28,7 +34,10 @@ function Header() {
             objectFit='contain'
           />
         </div>
-        <div className='relative w-10 lg:hidden flex-shrink-0 cursor-pointer'>
+        <div
+          onClick={() => router.push('/')}
+          className='relative w-10 lg:hidden flex-shrink-0 cursor-pointer'
+        >
           <Image
             src='/images/insta-logo.png'
             layout='fill'
@@ -52,7 +61,7 @@ function Header() {
         </div>
         {/* Right */}
         <div className='flex items-center justify-end space-x-4'>
-          <HomeIcon className='navBtn' />
+          <HomeIcon onClick={() => router.push('/')} className='navBtn' />
           <MenuIcon className='h-6 md:hidden cursor-pointer' />
 
           {session ? (
@@ -63,7 +72,10 @@ function Header() {
                   3
                 </div>
               </div>
-              <PlusCircleIcon className='navBtn' />
+              <PlusCircleIcon
+                onClick={() => setOpen(true)}
+                className='navBtn'
+              />
               <UserGroupIcon className='navBtn' />
               <HeartIcon className='navBtn' />
               <img
